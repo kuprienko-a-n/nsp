@@ -1,0 +1,58 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<h1>Hello from view:)</h1><hr>
+-----------------------------------------
+try to make long poll
+<form method="post" id="submit_form" action="http://nsp/index.php?route=comet/save">
+    User name
+    <textarea style="width:300px; height:100px" id="user_name"></textarea>
+    User msg
+    <textarea style="width:300px; height:100px" id="user_msg"></textarea>
+</form>
+<button id="submit">save</button>
+<div id="chat" style="border:1px solid red;width:200px; min-height:100px;">
+
+</div>
+<script>
+(function($){
+    $(window).load(function(){
+        //controll window
+        $('#submit').click(function(e){
+            $.ajax({
+                type: "POST",
+                url: 'http://nsp/index.php?route=comet/save',
+                data: {
+                    user_name: $('#user_name').val(),
+                    user_msg: $('#user_msg').val()
+                },
+                success: function(){
+                    console.log('pushed');
+                },
+                dataType: 'json'
+            });
+
+            return false;
+        })
+
+            // Main Long Poll function
+            function longPoll()
+            {
+                // Open an AJAX call to the server's Long Poll PHP file
+//                $.get("http://192.168.137.11:8080/nsp/index.php?route=comet/subscribe", function(data)
+                $.get("http://nsp/index.php?route=comet/subscribe", function(data)
+                {
+                    if(data){
+                        // Callback to handle message sent from server (not illustrated)
+//                        $('#chat').append('<div>' + data.user_name + ' : ' + data.user_msg + '</div></br>');
+                        $('#chat').append('<div>' + JSON.stringify(data) + '</div></br>');
+                    }
+                    // Open the Long Poll again
+                    longPoll();
+                });
+            }
+
+            // Make the initial call to Long Poll
+            longPoll();
+    })
+})(jQuery)
+</script>

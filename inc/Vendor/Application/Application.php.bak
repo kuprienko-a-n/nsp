@@ -1,0 +1,84 @@
+<?php
+/**
+ * Created by JetBrains PhpStorm.
+ * User: Andrei_Kuprienka
+ * Date: 5/22/13
+ * Time: 10:42 AM
+ * To change this template use File | Settings | File Templates.
+ */
+
+namespace Vendor\Application;
+
+use \Vendor\Error as Error;
+use \Vendor\NSP\NSP;
+
+class Application{
+    private $_session;
+
+
+    //private static $_registry = new \Exception(); it's a pity :"(
+
+    /**
+     * @var \Vendor\Registry\Registry
+     */
+    public $registry;
+
+    function __construct(){
+        echo '<br>' .  __class__ . ' is initialized</br>';
+        //load core components according to config
+
+    }
+
+    //should be done the other way
+    function loadCoreRegistry(){
+        $this->registry = \Vendor\Registry\Registry::getInstance();
+        $config = include_once NSP_ROOT . '/inc/Vendor/config.php';
+
+        foreach ($config as $rkey => $val) {
+            switch ($rkey){
+                case 'db':
+                    if($val === 'sqlite'){
+                       $this->registry->set($rkey, new \Vendor\Database\Sqlite());
+                    }elseif($val === 'mongodb'){
+                        $this->registry->set($rkey, new \Vendor\Database\Mongodb());
+                    }
+                    break;
+            }
+        }
+    }
+
+    function run(){
+        NSP::$app = $this;
+        $this->loadCoreRegistry();
+
+        $this->initSession();
+        $this->initErrorsControl();
+        $this->initRouter();
+    }
+
+    protected function initSession($handlerType = 'user'){
+        $this->_session = new \Vendor\Session\SqliteSessionHandler();
+        $this->_session->init();
+//        $this->_session->open(uniqid());
+    }
+
+    protected function initRouter(){
+        $this->_router = new \Vendor\Router\Router();
+        $this->_router->setPath(NSP_ROOT . DIRECTORY_SEPARATOR . 'app');
+//        $this->_session->open(uniqid());
+    }
+
+    /**
+     * @return \Vendor\Common\ISession
+     */
+    public function getSession(){
+        return $this->_session;
+    }
+
+    protected function initErrorsControl(){
+        $errorHandler = new \Vendor\Error\Handler();
+        set_error_handler(array($errorHandler, 'handleError'), error_reporting());
+        set_exception_handler(array($errorHandler, 'handleException'));
+    }
+
+}

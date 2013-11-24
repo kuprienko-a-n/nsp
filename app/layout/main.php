@@ -1,0 +1,1 @@
+<h1>Hello world from layout</h1>

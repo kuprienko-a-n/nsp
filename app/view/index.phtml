@@ -1,0 +1,57 @@
+<!--Real plexor-->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="<?php echo $rplxJsUri; ?>"></script>
+<h1>Hello from view:)</h1><hr>
+-----------------------------------------
+try to make long poll
+<form method="post" id="submit_form" action="http://nsp/index.php?route=comet/save">
+    User name
+    <textarea style="width:300px; height:100px" id="user_name"></textarea>
+    User msg
+    <textarea style="width:300px; height:100px" id="user_msg"></textarea>
+</form>
+<button id="submit">save</button>
+<div id="chat" style="border:1px solid red;width:200px; min-height:100px;">
+
+</div>
+<script>
+(function($){
+        $(window).load(function(){
+            //controll window
+            $('#submit').click(function(e){
+                $.ajax({
+                    type: "POST",
+                    url: 'http://nsp.dev/index.php?route=comet/save',
+                    data: {
+                        user_name: $('#user_name').val(),
+                        user_msg: $('#user_msg').val()
+                    },
+                    success: function(){
+                        console.log('pushed');
+                    },
+                    dataType: 'json'
+                });
+
+                return false;
+            })
+
+            // Create Dklab_Realplexor client.
+            var realplexor = new Dklab_Realplexor(
+                "http://rpl.nsp.dev/",  // Realplexor's engine URL
+                "nsp" // namespace (optional)
+            );
+
+
+            // Listen only messages with cursor values > $initCursor.
+<!--            realplexor.setCursor("Alpha", --><?php //echo $initCursor; ?><!--);-->
+            realplexor.setCursor("Alpha", <?php echo $initCursor; ?>);
+            // Subsctibe to channels.
+            realplexor.subscribe("Alpha", function(data, id, cursor) {
+                $('#chat').append('<div>' + cursor + ' : ' + data.user_name + ' : ' + data.user_msg + '</div></br>');
+            });
+
+            realplexor.execute();
+        })
+
+})(jQuery)
+</script>
