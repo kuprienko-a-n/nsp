@@ -1,4 +1,6 @@
 <?php
+
+
 //ini_set('dipslay_errors', 1);
 //error_reporting(E_ALL);
 ////require_once 'a/a.php';

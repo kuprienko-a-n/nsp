@@ -36,8 +36,10 @@ interface CometInterface
     /**
      * Registration of events and handlers assignment
      *
-     * @param string $event Имя события
-     * @param callback $callback Функция-обработчик
+     * @param string $event
+     *  Event name
+     * @param callback $callback
+     *  event handler
      */
     public function registerEvent($event, $callback);
 }
