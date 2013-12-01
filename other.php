@@ -1,31 +1,31 @@
 <?php
-$i= 10;
-//var_dump($i++);//10
-//var_dump($i);//11
-//var_dump(10 + $i++ + ++$i); die;//32
-var_dump($i + ++$i); die;//22
-var_dump($i + $i++); die;//21
-var_dump($i + $i++ + ++$i); die;//33
-// при совместном использовании ++ и + результат будет неопределенным из документации
-$a = 1;
-echo ++$a + $a++; // может вывести 4 или 5
+//$i= 10;
+////var_dump($i++);//10
+////var_dump($i);//11
+////var_dump(10 + $i++ + ++$i); die;//32
+//var_dump($i + ++$i); die;//22
+//var_dump($i + $i++); die;//21
+//var_dump($i + $i++ + ++$i); die;//33
+//// при совместном использовании ++ и + результат будет неопределенным из документации
+//$a = 1;
+//echo ++$a + $a++; // может вывести 4 или 5
+//
+//
+//var_dump($i++ + ++$i); die;//22
 
-
-var_dump($i++ + ++$i); die;//22
-
-ini_set('display_errors', 1);
-$f = function(){
-    $cl = 0;
-    return function () use (&$cl){
-    	var_dump($cl++);
-    };
-};
-$c = $f();
-
-$c();
-$c();
-
-die;
+//ini_set('display_errors', 1);
+//$f = function(){
+//    $cl = 0;
+//    return function () use (&$cl){
+//    	var_dump($cl++);
+//    };
+//};
+//$c = $f();
+//
+//$c();
+//$c();
+//
+//die;
 /**
  * Created by PhpStorm.
  * User: KAN

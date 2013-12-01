@@ -9,9 +9,9 @@ if ($pid == -1) {
     die('die parent process'.PHP_EOL);
 } else {
     // Новый процесс, запускаем главный цикл
-    while(true) {
-
-    }
+//    while(true) {
+//
+//    }
 }
 // Отцепляемся от терминала
 posix_setsid();
